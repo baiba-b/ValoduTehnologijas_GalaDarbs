@@ -6,6 +6,11 @@ nepieciešams izpildīt sekojošās komandas termināli:
 ```
 pip install requests beautifulsoup4 regex torch transformers matplotlib
 ```
+testa datu ieguvei:
+```
+python auto_import.py
+```
+
 Šajā projektā tiek izmantots LV-BERT modelis.
 
 @inproceedings{Znotins-Barzdins:2020:BalticHLT,
