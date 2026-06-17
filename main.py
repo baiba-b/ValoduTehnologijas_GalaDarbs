@@ -40,8 +40,8 @@ emocijas2 = EmocijuAnalize.analizet_emocijas(teksts2)
 bert_rezultats1 = str(emocijas1)
 bert_rezultats2 = str(emocijas2)
 
-save_article(url1, site1, category1, bert_rezultats1)
-save_article(url2, site2, category2, bert_rezultats2)
+save_article(url1, site1, category1, str(emocijas1))
+save_article(url2, site2, category2, str(emocijas2))
 
 print("\n=== Pirmais raksts ===")
 print("Vietne:", site1)
