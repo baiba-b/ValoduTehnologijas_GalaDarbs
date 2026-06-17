@@ -2,6 +2,7 @@ import HTML_ieguve_no_url
 import HTMLapstrade
 import prieksapstrade
 import EmocijuAnalize
+import Vizualizacija
 
 prieksapstrade.load_stoplist("data/stoplist.txt")
 
@@ -62,3 +63,5 @@ freq2 = Counter(tekstvienibas2)
 # print("\nTop 20 tekstvienības 2. rakstā:")
 # for token, count in freq2.most_common(20):
 #     print(f"{token}: {count}")
+
+Vizualizacija.attelot_emociju_salidzinajumu(emocijas1, emocijas2, site1, site2)

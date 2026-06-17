@@ -4,7 +4,7 @@ Gala darbs kursā "Valodu Tehnoloģiju pamati"
 Uzstādīšana:
 nepieciešams izpildīt sekojošās komandas termināli:
 ```
-pip install requests beautifulsoup4 regex torch transformers
+pip install requests beautifulsoup4 regex torch transformers matplotlib
 ```
 Šajā projektā tiek izmantots LV-BERT modelis.
 
