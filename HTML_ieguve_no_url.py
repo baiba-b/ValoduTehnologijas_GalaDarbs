@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
@@ -17,7 +18,15 @@ def get_body_html(url):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        return str(soup.body) if soup.body else "Body nav atrasts"
+        site = urlparse(url).netloc.replace("www.", "")
+
+        return {
+            "site": site,
+            "html": str(soup.body) if soup.body else "Body nav atrasts"
+        }
 
     except Exception as e:
-        return f"Kļūda: {e}"
+        return {
+            "site": None,
+            "html": f"Kļūda: {e}"
+        }
