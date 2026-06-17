@@ -1,5 +1,6 @@
 import sqlite3
-
+import pandas as pd
+import os
 
 def init_db():
     conn = sqlite3.connect("raksti.db")
@@ -18,6 +19,26 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+def export_to_csv():
+    os.makedirs("data/csv", exist_ok=True)
+
+    conn = sqlite3.connect("raksti.db")
+
+    df = pd.read_sql_query(
+        "SELECT * FROM raksti",
+        conn
+    )
+
+    df.to_csv(
+        "data/csv/raksti.csv",
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+    conn.close()
+
+    print("CSV atjaunots: data/csv/raksti.csv")
 
 
 def save_article(url, vietne, kategorija, bert_rezultats=None):
@@ -41,3 +62,5 @@ def save_article(url, vietne, kategorija, bert_rezultats=None):
 
     conn.commit()
     conn.close()
+
+    export_to_csv()

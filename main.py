@@ -8,7 +8,6 @@ from database import init_db, save_article
 init_db()
 
 
-
 prieksapstrade.load_stoplist("data/stoplist.txt")
 
 url1 = input("Pirmais URL: ")
@@ -31,8 +30,8 @@ teksts1 = HTMLapstrade.html_to_txt(html1)
 teksts2 = HTMLapstrade.html_to_txt(html2)
 
 # Teksts -> tekstvienības (tokeni)
-tekstvienibas1 = prieksapstrade.tokenize(teksts1)
-tekstvienibas2 = prieksapstrade.tokenize(teksts2)
+# tekstvienibas1 = prieksapstrade.tokenize(teksts1)
+# tekstvienibas2 = prieksapstrade.tokenize(teksts2)
 
 # Teksts -> emocijas (BERT, izmanto tīro tekstu, nevis tekstvienības)
 emocijas1 = EmocijuAnalize.analizet_emocijas(teksts1)
@@ -41,8 +40,8 @@ emocijas2 = EmocijuAnalize.analizet_emocijas(teksts2)
 bert_rezultats1 = str(emocijas1)
 bert_rezultats2 = str(emocijas2)
 
-save_article(url1, site1, category1, bert_rezultats1)
-save_article(url2, site2, category2, bert_rezultats2)
+save_article(url1, site1, category1, str(emocijas1))
+save_article(url2, site2, category2, str(emocijas2))
 
 print("\n=== Pirmais raksts ===")
 print("Vietne:", site1)
@@ -64,8 +63,8 @@ for emocija, varbutiba in emocijas2.items():
 
 from collections import Counter
 
-freq1 = Counter(tekstvienibas1)
-freq2 = Counter(tekstvienibas2)
+# freq1 = Counter(tekstvienibas1)
+# freq2 = Counter(tekstvienibas2)
 
 # print("\nTop 20 tekstvienības 1. rakstā:")
 # for token, count in freq1.most_common(20):
