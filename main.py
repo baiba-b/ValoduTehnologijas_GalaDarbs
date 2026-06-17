@@ -1,6 +1,7 @@
 import HTML_ieguve_no_url
 import HTMLapstrade
 import prieksapstrade
+import EmocijuAnalize
 
 prieksapstrade.load_stoplist("data/stoplist.txt")
 
@@ -24,15 +25,25 @@ teksts2 = HTMLapstrade.html_to_txt(html2)
 tekstvienibas1 = prieksapstrade.tokenize(teksts1)
 tekstvienibas2 = prieksapstrade.tokenize(teksts2)
 
+# Teksts -> emocijas (BERT, izmanto tīro tekstu, nevis tekstvienības)
+emocijas1 = EmocijuAnalize.analizet_emocijas(teksts1)
+emocijas2 = EmocijuAnalize.analizet_emocijas(teksts2)
+
 print("\n=== Pirmais raksts ===")
 print("Vietne:", site1)
 print("Tekstvienības:")
 print(tekstvienibas1)
+print("Emocijas:")
+for emocija, varbutiba in emocijas1.items():
+    print(f"  {emocija}: {varbutiba:.2f}")
 
 print("\n=== Otrais raksts ===")
 print("Vietne:", site2)
 print("Tekstvienības:")
 print(tekstvienibas2)
+print("Emocijas:")
+for emocija, varbutiba in emocijas2.items():
+    print(f"  {emocija}: {varbutiba:.2f}")
 
 #Šo var neņemt - izveido biežumsarakstu
 
