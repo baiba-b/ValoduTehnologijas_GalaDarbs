@@ -14,6 +14,9 @@ raksts2 = HTML_ieguve_no_url.get_body_html(url2)
 site1 = raksts1["site"]
 site2 = raksts2["site"]
 
+category1 = raksts1["category"]
+category2 = raksts2["category"]
+
 html1 = raksts1["html"]
 html2 = raksts2["html"]
 
@@ -31,16 +34,16 @@ emocijas2 = EmocijuAnalize.analizet_emocijas(teksts2)
 
 print("\n=== Pirmais raksts ===")
 print("Vietne:", site1)
-print("Tekstvienības:")
-print(tekstvienibas1)
+print("Kategorija:", category1)
+# print(tekstvienibas1)
 print("Emocijas:")
 for emocija, varbutiba in emocijas1.items():
     print(f"  {emocija}: {varbutiba:.2f}")
 
 print("\n=== Otrais raksts ===")
 print("Vietne:", site2)
-print("Tekstvienības:")
-print(tekstvienibas2)
+print("Kategorija:", category2)
+# print(tekstvienibas2)
 print("Emocijas:")
 for emocija, varbutiba in emocijas2.items():
     print(f"  {emocija}: {varbutiba:.2f}")
@@ -52,10 +55,10 @@ from collections import Counter
 freq1 = Counter(tekstvienibas1)
 freq2 = Counter(tekstvienibas2)
 
-print("\nTop 20 tekstvienības 1. rakstā:")
-for token, count in freq1.most_common(20):
-    print(f"{token}: {count}")
+# print("\nTop 20 tekstvienības 1. rakstā:")
+# for token, count in freq1.most_common(20):
+#     print(f"{token}: {count}")
 
-print("\nTop 20 tekstvienības 2. rakstā:")
-for token, count in freq2.most_common(20):
-    print(f"{token}: {count}")
+# print("\nTop 20 tekstvienības 2. rakstā:")
+# for token, count in freq2.most_common(20):
+#     print(f"{token}: {count}")
