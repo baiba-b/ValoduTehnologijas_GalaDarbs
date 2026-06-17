@@ -9,20 +9,20 @@ CATEGORY_MAP = {
     "latvija": "Latvija",
     "pasaule": "Pasaule",
     "ekonomika": "Ekonomika",
-    "bizness": "Ekonomika",
+
     "sports": "Sports",
+    "futbols": "Sports",
+    "basketbols": "Sports",
+    "hokejs": "Sports",
+    "teniss": "Sports",
+    "volejbols": "Sports",
+    "florbols": "Sports",
+
     "kultura": "Kultūra",
-    "kultūra": "Kultūra",
     "izklaide": "Izklaide",
     "tehnologijas": "Tehnoloģijas",
     "auto": "Auto",
-    "veseliba": "Veselība",
-    "veselība": "Veselība",
-    "laika-zinas": "Laika ziņas",
-    "kriminalzinas": "Kriminālziņas",
-    "kriminālziņas": "Kriminālziņas",
-    "viedokli": "Viedokļi",
-    "viedokļi": "Viedokļi"
+    "veseliba": "Veselība"
 }
 
 
@@ -41,36 +41,36 @@ def find_category_from_url(url):
         else:
             category_key = parts[1]
 
-        category_map = {
-            "sports": "Sports",
-            "futbols": "Sports",
-            "zinas": "Ziņas",
-            "latvija": "Latvija",
-            "pasaule": "Pasaule",
-            "ekonomika": "Ekonomika",
-            "kultura": "Kultūra",
-            "kultūra": "Kultūra",
-            "dzive--stils": "Dzīvesstils",
-            "dzive-stils": "Dzīvesstils",
-            "tehnologijas": "Tehnoloģijas"
-        }
+        if category_key in CATEGORY_MAP:
+            return CATEGORY_MAP[category_key]
 
-        if category_key in category_map:
-            return category_map[category_key]
+    # Rezerves variants: pārbauda visus URL fragmentus
+    for part in parts:
+        if part in CATEGORY_MAP:
+            return CATEGORY_MAP[part]
 
     return None
 
 
 # Mēģina iegūt kategoriju no HTML meta informācijas
 def find_category_from_html(soup):
-
     meta = soup.find("meta", attrs={"property": "article:section"})
     if meta and meta.get("content"):
-        return meta["content"]
+        category_key = meta["content"].strip().lower()
+
+        if category_key in CATEGORY_MAP:
+            return CATEGORY_MAP[category_key]
+
+        return meta["content"].strip()
 
     meta = soup.find("meta", attrs={"name": "section"})
     if meta and meta.get("content"):
-        return meta["content"]
+        category_key = meta["content"].strip().lower()
+
+        if category_key in CATEGORY_MAP:
+            return CATEGORY_MAP[category_key]
+
+        return meta["content"].strip()
 
     return None
 
@@ -79,8 +79,7 @@ def find_category_from_html(soup):
 def ask_user_category():
     categories = sorted(set(CATEGORY_MAP.values()))
 
-    print("\nKategoriju neizdevās automātiski noteikt.")
-    print("Izvēlies kategoriju:")
+    print("\nIzvēlies kategoriju:")
 
     for index, category in enumerate(categories, start=1):
         print(f"{index}. {category}")
@@ -95,6 +94,24 @@ def ask_user_category():
                 return categories[choice - 1]
 
         print("Nederīga izvēle. Mēģini vēlreiz.")
+
+
+# Prasa apstiprināt automātiski noteikto kategoriju
+def confirm_category(category):
+    if category is None:
+        print("\nKategoriju neizdevās automātiski noteikt.")
+        return ask_user_category()
+
+    while True:
+        answer = input(f"\nNoteiktā kategorija ir '{category}'. Vai tā ir pareiza? (j/n): ").strip().lower()
+
+        if answer in ["j", "ja", "jā", "y", "yes"]:
+            return category
+
+        if answer in ["n", "ne", "no"]:
+            return ask_user_category()
+
+        print("Lūdzu ievadi 'j' vai 'n'.")
 
 
 # Iegūst HTML kodu un kategoriju no mājaslapas
@@ -121,9 +138,8 @@ def get_body_html(url):
         if category is None:
             category = find_category_from_url(url)
 
-        # Ja joprojām neizdodas, jautā lietotājam
-        if category is None:
-            category = ask_user_category()
+        # Lietotājs apstiprina vai labo kategoriju
+        category = confirm_category(category)
 
         return {
             "site": site,
