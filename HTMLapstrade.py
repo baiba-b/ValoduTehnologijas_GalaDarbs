@@ -9,11 +9,13 @@ def remove_html_elements(text):
     soup = BeautifulSoup(text, "html.parser")
 
     # Filtering by specific HTML elements
-    for element in soup.find_all(["header", "footer", "button"]):
+    # nav/aside parasti satur izvēlnes, robežceliņus (breadcrumbs) un sānjoslas - ne pašu rakstu
+    for element in soup.find_all(["header", "footer", "button", "nav", "aside"]):
         element.decompose() # Removes an element from the tree
 
     # Filtering by HTML elements having specific attributes
-    for element in soup.find_all(["div"], attrs={"class": re.compile(".*([Mm]enu|share|backlink).*")}):
+    # Nav restriktēts uz div, jo dažas vietnes (piem. apollo.lv) liek robežceliņus section tagā
+    for element in soup.find_all(attrs={"class": re.compile(".*([Mm]enu|share|backlink|[Hh]eader|[Ff]ooter|breadcrumb|editor).*")}):
         element.decompose()
 
     return str(soup)
