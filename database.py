@@ -16,6 +16,7 @@ def init_db():
             vietne TEXT,
             kategorija TEXT,
             bert_rezultats TEXT,
+            modelis TEXT,
             izveidots TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -25,7 +26,7 @@ def init_db():
 
 
 # Saglabā vienu rakstu datubāzē un atjauno CSV eksportu.
-def save_article(url, vietne, kategorija, bert_rezultats=None):
+def save_article(url, vietne, kategorija, bert_rezultats=None, modelis=None):
     conn = sqlite3.connect("raksti.db")
     cursor = conn.cursor()
 
@@ -34,14 +35,16 @@ def save_article(url, vietne, kategorija, bert_rezultats=None):
             url,
             vietne,
             kategorija,
-            bert_rezultats
+            bert_rezultats,
+            modelis
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
     """, (
         url,
         vietne,
         kategorija,
-        bert_rezultats
+        bert_rezultats,
+        modelis
     ))
 
     conn.commit()
@@ -79,3 +82,52 @@ def export_to_csv():
     conn.close()
 
     print("CSV atjaunots: data/csv/raksti.csv")
+
+
+# Ielādē visas dotā modeļa rindas un atgriež DataFrame ar emocijām kā atsevišķām kolonnām.
+def _ieladet_emociju_df(modelis):
+    conn = sqlite3.connect("raksti.db")
+    df = pd.read_sql_query("SELECT * FROM raksti WHERE modelis = ?", conn, params=(modelis,))
+    conn.close()
+
+    emociju_dati = df["bert_rezultats"].apply(
+        lambda x: ast.literal_eval(x) if pd.notna(x) else {}
+    )
+
+    return pd.concat([df.drop(columns=["bert_rezultats"]), pd.json_normalize(emociju_dati)], axis=1)
+
+
+# Vidējās emocijas dotajām vietnēm (tikai dotā modeļa rindas).
+def videjas_emocijas_pa_vietnem(vietnes, modelis):
+    df = _ieladet_emociju_df(modelis)
+    df = df[df["vietne"].isin(vietnes)]
+
+    emociju_kolonnas = [c for c in df.columns if c not in ["id", "url", "vietne", "kategorija", "modelis", "izveidots"]]
+
+    return df.groupby("vietne")[emociju_kolonnas].mean().to_dict(orient="index")
+
+
+# Vidējās emocijas dotajām kategorijām (tikai dotā modeļa rindas).
+def videjas_emocijas_pa_kategorijam(kategorijas, modelis):
+    df = _ieladet_emociju_df(modelis)
+    df = df[df["kategorija"].isin(kategorijas)]
+
+    emociju_kolonnas = [c for c in df.columns if c not in ["id", "url", "vietne", "kategorija", "modelis", "izveidots"]]
+
+    return df.groupby("kategorija")[emociju_kolonnas].mean().to_dict(orient="index")
+
+
+# Vidējās emocijas visām DB esošajām vietnēm (tikai dotā modeļa rindas).
+def videjas_emocijas_visam_vietnem(modelis):
+    df = _ieladet_emociju_df(modelis)
+    emociju_kolonnas = [c for c in df.columns if c not in ["id", "url", "vietne", "kategorija", "modelis", "izveidots"]]
+
+    return df.groupby("vietne")[emociju_kolonnas].mean().to_dict(orient="index")
+
+
+# Vidējās emocijas visām DB esošajām kategorijām (tikai dotā modeļa rindas).
+def videjas_emocijas_visam_kategorijam(modelis):
+    df = _ieladet_emociju_df(modelis)
+    emociju_kolonnas = [c for c in df.columns if c not in ["id", "url", "vietne", "kategorija", "modelis", "izveidots"]]
+
+    return df.groupby("kategorija")[emociju_kolonnas].mean().to_dict(orient="index")

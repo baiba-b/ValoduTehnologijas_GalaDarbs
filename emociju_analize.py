@@ -49,7 +49,12 @@ def analizet_gabalu(teksts, tokenizer, model):
     with torch.no_grad():
         outputs = model(**inputs)
 
-    varbutibas = torch.sigmoid(outputs.logits)[0]
+    # lvbert-emotions-ekman ir multi-label, fine-tuned/no-nulles modeļi ir single-label
+    if model.config.problem_type == "multi_label_classification":
+        varbutibas = torch.sigmoid(outputs.logits)[0]
+    else:
+        varbutibas = torch.softmax(outputs.logits, dim=-1)[0]
+
     id2label = model.config.id2label
 
     return {id2label[i]: varbutibas[i].item() for i in range(len(id2label))}

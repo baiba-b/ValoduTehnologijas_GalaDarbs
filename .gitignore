@@ -1,7 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
-grafiks.png
+grafiks*.png
 emocijas_pec_avota.png
 emocijas_pec_kategorijas.png
 raksti.db
