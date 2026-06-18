@@ -10,6 +10,10 @@ testa datu ieguvei:
 ```
 python auto_import.py
 ```
+trenēšanai:
+```
+pip install datasets
+```
 
 Šajā projektā tiek izmantots LV-BERT modelis.
 
