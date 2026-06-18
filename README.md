@@ -12,8 +12,14 @@ python auto_import.py
 ```
 trenēšanai:
 ```
-pip install datasets
+pip install datasets scikit-learn accelerate
 ```
+palaišanas pirmajā reizē jāpalaiž:
+```
+python finetuned.py
+python bertsalidzinajums.py
+```
+Tas izveidos mapes models/lvbert_final un models/bert_from_scratch_final. Bez tām main.py bus kļūda.
 
 Šajā projektā tiek izmantots LV-BERT modelis.
 
