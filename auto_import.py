@@ -16,6 +16,7 @@ URLS = [
 
 init_db()
 
+# datubāzes populešana ar rakstiem no URL saraksta, iegūstot tekstu un analizējot emocijas, pēc tam saglabājot rezultātus datubāzē.
 for url in URLS:
     print("\nApstrādā:", url)
 

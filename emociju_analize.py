@@ -2,15 +2,13 @@ import re
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-# Pēc noklusējuma izmantojam LVBERT, pielāgotu Ekman emociju klasifikācijai latviešu valodā.
-# Vēlāk var pamēģināt citu (vai pašu apmācītu) BERT modeli,
+# Pēc noklusējuma izmantojam LVBERT, pielāgotu Ekman emociju klasifikācijai latviešu valodā
 NOKLUSETAIS_MODELIS = "AiLab-IMCS-UL/lvbert-emotions-ekman"
 MAX_TOKENI = 480  # BERT limits ir 512, atstājam rezervi
 
 _ieladetie_modeli = {}
 
-# Ielādē tokenizatoru un modeli pēc nosaukuma (no Hugging Face hub).
-# Ja modelis jau reiz ielādēts, atgriež to no keša.
+# Ielādē tokenizatoru un modeli pēc nosaukuma no hf
 def ieladet_modeli(model_name=NOKLUSETAIS_MODELIS):
     if model_name not in _ieladetie_modeli:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -21,8 +19,7 @@ def ieladet_modeli(model_name=NOKLUSETAIS_MODELIS):
     return _ieladetie_modeli[model_name]
 
 
-# Sadala garu tekstu vairākos gabalos pa teikumiem, lai katrs gabals ietilptu
-# BERT 512 tokenu limitā. Nepieciešams, jo ziņu raksti parasti ir garāki par to.
+# Sadala garu tekstu vairākos gabalos pa teikumiem
 def sadalit_teiku_gabalos(teksts, tokenizer, max_tokeni=MAX_TOKENI):
     teikumi = re.split(r"(?<=[.!?])\s+", teksts.strip())
 
@@ -45,8 +42,7 @@ def sadalit_teiku_gabalos(teksts, tokenizer, max_tokeni=MAX_TOKENI):
     return gabali
 
 
-# Palaiž vienu teksta gabalu caur BERT modeli un atgriež katras emocijas
-# varbūtību (0-1). Modelis ir multi-label, tāpēc izmanto sigmoid, nevis softmax.
+# Palaiž vienu teksta gabalu caur BERT modeli un atgriež emociju varbūtības
 def analizet_gabalu(teksts, tokenizer, model):
     inputs = tokenizer(teksts, return_tensors="pt", truncation=True, max_length=512)
 
@@ -59,10 +55,7 @@ def analizet_gabalu(teksts, tokenizer, model):
     return {id2label[i]: varbutibas[i].item() for i in range(len(id2label))}
 
 
-# Analizē visa raksta emocijas: sadala garumā gabalos, katru analizē atsevišķi
-# un rezultātus vidējo, lai iegūtu emociju sadalījumu visam rakstam.
-# Teksts šeit ir jau iztīrīts (piem. ar html_apstrade.html_to_txt), bet citādi
-# nemainīts - BERT savam tokenizatoram pats vislabāk tiek galā ar dabīgu tekstu.
+# iegūst videjo varbūtību katrai emocijai no visa teksta
 def analizet_emocijas(teksts, model_name=NOKLUSETAIS_MODELIS):
     tokenizer, model = ieladet_modeli(model_name)
     gabali = sadalit_teiku_gabalos(teksts, tokenizer)

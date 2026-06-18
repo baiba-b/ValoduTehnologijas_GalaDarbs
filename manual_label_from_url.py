@@ -5,6 +5,7 @@ import re
 import html_ieguve_no_url
 import html_apstrade
 
+# rīks treniņa datu vākšanai
 
 LABELS = {
     "1": "anger",
@@ -17,6 +18,7 @@ LABELS = {
 }
 
 
+# Sadala tekstu teikumos un izmet pārāk īsos
 def split_sentences(text):
     sentences = re.split(r'(?<=[.!?])\s+', text)
 
@@ -33,6 +35,7 @@ def split_sentences(text):
     return cleaned
 
 
+# Parāda teikumu un liek lietotājam izvēlēties tā emociju no LABELS saraksta.
 def ask_label(sentence):
     print("\nTeikums:")
     print(sentence)
@@ -50,6 +53,7 @@ def ask_label(sentence):
         print("Nederīga izvēle. Mēģini vēlreiz.")
 
 
+# Pieraksta marķētos teikumus CSV failam
 def save_labeled_sentences(rows, output_file):
     os.makedirs("data/csv", exist_ok=True)
 
@@ -74,6 +78,7 @@ def save_labeled_sentences(rows, output_file):
         writer.writerows(rows)
 
 
+# Iegūst rakstu, sadala teikumos, marķē katru un saglabā CSV
 def main():
     url = input("Ievadi raksta URL: ").strip()
 

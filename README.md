@@ -4,7 +4,7 @@ Gala darbs kursā "Valodu Tehnoloģiju pamati"
 Uzstādīšana:
 nepieciešams izpildīt sekojošās komandas termināli:
 ```
-pip install requests beautifulsoup4 regex torch transformers matplotlib
+pip install requests beautifulsoup4 torch transformers matplotlib
 ```
 testa datu ieguvei:
 ```

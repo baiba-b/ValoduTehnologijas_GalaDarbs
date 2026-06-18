@@ -1,14 +1,12 @@
 import html_ieguve_no_url
 import html_apstrade
-import prieksapstrade
 import emociju_analize
 import vizualizacija
 from database import init_db, save_article
 
 init_db()
 
-
-prieksapstrade.load_stoplist("data/stoplist.txt")
+html_apstrade.load_stoplist("data/stoplist.txt")
 
 url1 = input("Pirmais URL: ")
 url2 = input("Otrais URL: ")
@@ -29,11 +27,7 @@ html2 = raksts2["html"]
 teksts1 = html_apstrade.html_to_txt(html1)
 teksts2 = html_apstrade.html_to_txt(html2)
 
-# Teksts -> tekstvienības (tokeni)
-# tekstvienibas1 = prieksapstrade.tokenize(teksts1)
-# tekstvienibas2 = prieksapstrade.tokenize(teksts2)
-
-# Teksts -> emocijas (BERT, izmanto tīro tekstu, nevis tekstvienības)
+# Teksts -> emocijas
 emocijas1 = emociju_analize.analizet_emocijas(teksts1)
 emocijas2 = emociju_analize.analizet_emocijas(teksts2)
 
@@ -46,7 +40,6 @@ save_article(url2, site2, category2, bert_rezultats2)
 print("\n=== Pirmais raksts ===")
 print("Vietne:", site1)
 print("Kategorija:", category1)
-# print(tekstvienibas1)
 print("Emocijas:")
 for emocija, varbutiba in emocijas1.items():
     print(f"  {emocija}: {varbutiba:.2f}")
@@ -54,24 +47,8 @@ for emocija, varbutiba in emocijas1.items():
 print("\n=== Otrais raksts ===")
 print("Vietne:", site2)
 print("Kategorija:", category2)
-# print(tekstvienibas2)
 print("Emocijas:")
 for emocija, varbutiba in emocijas2.items():
     print(f"  {emocija}: {varbutiba:.2f}")
-
-# Šo var neņemt - izveido biežumsarakstu
-
-from collections import Counter
-
-# freq1 = Counter(tekstvienibas1)
-# freq2 = Counter(tekstvienibas2)
-
-# print("\nTop 20 tekstvienības 1. rakstā:")
-# for token, count in freq1.most_common(20):
-#     print(f"{token}: {count}")
-
-# print("\nTop 20 tekstvienības 2. rakstā:")
-# for token, count in freq2.most_common(20):
-#     print(f"{token}: {count}")
 
 vizualizacija.attelot_emociju_salidzinajumu(emocijas1, emocijas2, site1, site2)

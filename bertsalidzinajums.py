@@ -10,12 +10,14 @@ from transformers import (
     TrainingArguments
 )
 
+# trenē mazu BERT modeli no nulles
 DATA_PATH = "data/manual_emotion_labels.csv"
 
 LABELS = ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
 label2id = {label: i for i, label in enumerate(LABELS)}
 id2label = {i: label for label, i in label2id.items()}
 
+# Ielādē teikumus
 df = pd.read_csv(DATA_PATH)
 df = df[["sentence", "manual_label"]].dropna()
 df["label"] = df["manual_label"].map(label2id)
@@ -23,7 +25,7 @@ df["label"] = df["manual_label"].map(label2id)
 dataset = Dataset.from_pandas(df[["sentence", "label"]])
 dataset = dataset.train_test_split(test_size=0.2, seed=42)
 
-# Izmanto BERT tokenizatora vārdnīcu, bet modeļa svari ir nejauši (netrenēts no nulles)
+# Izmanto BERT tokenizatora vārdnīcu, modeļa svari ir nejauši
 tokenizer = BertTokenizerFast.from_pretrained("bert-base-multilingual-cased")
 
 def tokenize(batch):
@@ -51,6 +53,8 @@ config = BertConfig(
 
 model = BertForSequenceClassification(config)
 
+
+# Novērtē modeli ar accuracy un macro-F1
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=1)
@@ -80,6 +84,7 @@ trainer = Trainer(
     compute_metrics=compute_metrics
 )
 
+# Trenē, novērtē un saglabā galīgo modeli
 trainer.train()
 print(trainer.evaluate())
 

@@ -4,13 +4,7 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-# Attēlo joslu diagrammu, kas blakus salīdzina divu rakstu emocijas.
-# emocijas1 un emocijas2 ir dict {emocija: varbūtība} - tieši tādi, ko atgriež
-# emociju_analize.analizet_emocijas(). Vēlāk, kad dati nāks no datubāzes,
-# vajadzēs vienkārši tos no turienes ielādēt šajā pašā formātā.
-# Grafiks tiek saglabāts kā attēls un atvērts ar OS noklusēto skatītāju, jo
-# matplotlib interaktīvais logs ne visur strādā (piem. bez tkinter).
+# Attēlo joslu diagrammu, kas salīdzina divu rakstu emocijas
 def attelot_emociju_salidzinajumu(emocijas1, emocijas2, nosaukums1="1. raksts", nosaukums2="2. raksts", fails="grafiks.png"):
     emocijas = list(emocijas1.keys())
     vertibas1 = [emocijas1[e] for e in emocijas]
@@ -37,7 +31,7 @@ def attelot_emociju_salidzinajumu(emocijas1, emocijas2, nosaukums1="1. raksts", 
     atvert_failu(fails)
 
 
-# Atver failu ar operētājsistēmas noklusēto programmu.
+# Atver failu ar operētājsistēmas noklusēto programmu
 def atvert_failu(fails):
     try:
         if sys.platform == "win32":

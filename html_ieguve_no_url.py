@@ -4,9 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-# Katra kanoniskā kategorija ar visiem zināmajiem sinonīmiem/URL apzīmējumiem,
-# ko dažādi portāli izmanto tai pašai tēmai (piem. LSM "arzemes", citur "ārvalstis").
-# Ja parādās jauns portāls ar citu apzīmējumu, vienkārši pievieno to attiecīgajā sarakstā.
+# Katra kategorija ar sinonīmiem/URL apzīmējumiem
 KATEGORIJU_SINONIMI = {
     "Latvija": ["latvija"],
     "Pasaule": ["pasaule", "arzemes", "ārzemes", "arvalstis", "ārvalstis", "starptautiska"],
@@ -24,16 +22,14 @@ KATEGORIJU_SINONIMI = {
 }
 
 
-# Pārvērš tekstu mazajos burtos un noņem diakritiskās zīmes, lai "Ārzemes",
-# "arzemes" un "ārvalstis" varētu salīdzināt vienādi neatkarīgi no pieraksta.
+# Pārvērš tekstu mazajos burtos un noņem diakritiskās zīmes
 def normalize_text(text):
     text = text.strip().lower()
     text = unicodedata.normalize("NFKD", text)
     return "".join(c for c in text if not unicodedata.combining(c))
 
 
-# Plakana uzmeklēšanas vārdnīca: normalizēts sinonīms -> kanoniskā kategorija.
-# Tiek uzbūvēta vienreiz no KATEGORIJU_SINONIMI, lai sinonīmus nevajadzētu uzturēt divviet.
+# normalizēts sinonīms -> kategorija
 CATEGORY_MAP = {
     normalize_text(sinonims): kategorija
     for kategorija, sinonimi in KATEGORIJU_SINONIMI.items()
@@ -50,7 +46,7 @@ def find_category_from_url(url):
 
     if len(parts) >= 2 and parts[0] == "raksts":
 
-        # LSM ziņu sadaļā izmanto trešo URL daļu
+        # LSM un citu avotu kategorijas izgūšana
         if len(parts) >= 3 and parts[1] == "zinas":
             category_key = parts[2]
         else:
@@ -61,7 +57,7 @@ def find_category_from_url(url):
         if category_key in CATEGORY_MAP:
             return CATEGORY_MAP[category_key]
 
-    # Rezerves variants: pārbauda visus URL fragmentus
+    # pārbauda visus URL fragmentus
     for part in parts:
         if normalize_text(part) in CATEGORY_MAP:
             return CATEGORY_MAP[normalize_text(part)]
@@ -143,19 +139,13 @@ def get_body_html(url):
         )
 
         response.raise_for_status()
-
         soup = BeautifulSoup(response.text, "html.parser")
-
         site = urlparse(url).netloc.replace("www.", "")
 
-        # Vispirms mēģina noteikt kategoriju no HTML
         category = find_category_from_html(soup)
-
-        # Ja neizdodas, mēģina no URL
         if category is None:
             category = find_category_from_url(url)
 
-        # Lietotājs apstiprina vai labo kategoriju
         category = confirm_category(category, url)
 
         return {
