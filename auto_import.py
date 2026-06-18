@@ -34,7 +34,8 @@ for url in URLS:
         url,
         site,
         category,
-        str(emocijas)
+        str(emocijas),
+        modelis=emociju_analize.NOKLUSETAIS_MODELIS
     )
 
     print("Saglabāts:", site, category)
