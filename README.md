@@ -17,11 +17,4 @@ pip install datasets
 
 Šajā projektā tiek izmantots LV-BERT modelis.
 
-@inproceedings{Znotins-Barzdins:2020:BalticHLT,
-  author = {Arturs Znotins and Guntis Barzdins},
-  title = {LVBERT: Transformer-Based Model for Latvian Language Understanding},
-  booktitle = {Human Language Technologies - The Baltic Perspective},
-  volume = {328},
-  pages = {111-115},
-  year = {2020}
-}
+Znotins, A., & Barzdins, G. (2020). LVBERT: Transformer-Based Model for Latvian Language Understanding [Conference paper]. Human Language Technologies - The Baltic Perspective, 328, 111–115.
