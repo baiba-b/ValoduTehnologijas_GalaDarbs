@@ -29,9 +29,7 @@ label2id = {label: i for i, label in enumerate(LABELS)}
 id2label = {i: label for label, i in label2id.items()}
 
 
-# ======================
 # Ielādē datus
-# ======================
 
 df = pd.read_csv(DATA_PATH)
 
@@ -49,9 +47,7 @@ dataset = dataset.train_test_split(
 )
 
 
-# ======================
 # LV-BERT
-# ======================
 
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_NAME
@@ -65,9 +61,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 
 
-# ======================
 # Tokenizācija
-# ======================
 
 def tokenize(batch):
     return tokenizer(
@@ -89,9 +83,7 @@ dataset = dataset.remove_columns(
 dataset.set_format("torch")
 
 
-# ======================
 # Metrikas
-# ======================
 
 def compute_metrics(eval_pred):
 
@@ -115,9 +107,7 @@ def compute_metrics(eval_pred):
     }
 
 
-# ======================
 # Treniņš
-# ======================
 
 training_args = TrainingArguments(
     output_dir="models/lvbert",
@@ -139,16 +129,12 @@ trainer = Trainer(
 )
 
 
-# ======================
 # Apmācība
-# ======================
 
 trainer.train()
 
 
-# ======================
 # Novērtēšana
-# ======================
 
 results = trainer.evaluate()
 
@@ -156,9 +142,7 @@ print("\nLV-BERT rezultāti:")
 print(results)
 
 
-# ======================
 # Saglabā modeli
-# ======================
 
 trainer.save_model(
     "models/lvbert_final"

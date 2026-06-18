@@ -2,8 +2,8 @@ import csv
 import os
 import re
 
-import HTML_ieguve_no_url
-import HTMLapstrade
+import html_ieguve_no_url
+import html_apstrade
 
 
 LABELS = {
@@ -77,13 +77,13 @@ def save_labeled_sentences(rows, output_file):
 def main():
     url = input("Ievadi raksta URL: ").strip()
 
-    raksts = HTML_ieguve_no_url.get_body_html(url)
+    raksts = html_ieguve_no_url.get_body_html(url)
 
     site = raksts["site"]
     category = raksts["category"]
     html = raksts["html"]
 
-    text = HTMLapstrade.html_to_txt(html)
+    text = html_apstrade.html_to_txt(html)
 
     sentences = split_sentences(text)
 

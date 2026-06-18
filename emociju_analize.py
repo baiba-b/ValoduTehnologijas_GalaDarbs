@@ -61,7 +61,7 @@ def analizet_gabalu(teksts, tokenizer, model):
 
 # Analizē visa raksta emocijas: sadala garumā gabalos, katru analizē atsevišķi
 # un rezultātus vidējo, lai iegūtu emociju sadalījumu visam rakstam.
-# Teksts šeit ir jau iztīrīts (piem. ar HTMLapstrade.html_to_txt), bet citādi
+# Teksts šeit ir jau iztīrīts (piem. ar html_apstrade.html_to_txt), bet citādi
 # nemainīts - BERT savam tokenizatoram pats vislabāk tiek galā ar dabīgu tekstu.
 def analizet_emocijas(teksts, model_name=NOKLUSETAIS_MODELIS):
     tokenizer, model = ieladet_modeli(model_name)

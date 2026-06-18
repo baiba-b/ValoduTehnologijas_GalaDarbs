@@ -23,7 +23,7 @@ df["label"] = df["manual_label"].map(label2id)
 dataset = Dataset.from_pandas(df[["sentence", "label"]])
 dataset = dataset.train_test_split(test_size=0.2, seed=42)
 
-# Uses BERT tokenizer vocabulary, but model weights are random
+# Izmanto BERT tokenizatora vārdnīcu, bet modeļa svari ir nejauši (netrenēts no nulles)
 tokenizer = BertTokenizerFast.from_pretrained("bert-base-multilingual-cased")
 
 def tokenize(batch):

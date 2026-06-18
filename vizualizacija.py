@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 # Attēlo joslu diagrammu, kas blakus salīdzina divu rakstu emocijas.
 # emocijas1 un emocijas2 ir dict {emocija: varbūtība} - tieši tādi, ko atgriež
-# EmocijuAnalize.analizet_emocijas(). Vēlāk, kad dati nāks no datubāzes,
+# emociju_analize.analizet_emocijas(). Vēlāk, kad dati nāks no datubāzes,
 # vajadzēs vienkārši tos no turienes ielādēt šajā pašā formātā.
 # Grafiks tiek saglabāts kā attēls un atvērts ar OS noklusēto skatītāju, jo
 # matplotlib interaktīvais logs ne visur strādā (piem. bez tkinter).

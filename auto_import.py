@@ -1,6 +1,6 @@
-import HTML_ieguve_no_url
-import HTMLapstrade
-import EmocijuAnalize
+import html_ieguve_no_url
+import html_apstrade
+import emociju_analize
 from database import init_db, save_article
 
 URLS = [
@@ -19,15 +19,15 @@ init_db()
 for url in URLS:
     print("\nApstrādā:", url)
 
-    raksts = HTML_ieguve_no_url.get_body_html(url)
+    raksts = html_ieguve_no_url.get_body_html(url)
 
     site = raksts["site"]
     category = raksts["category"]
     html = raksts["html"]
 
-    teksts = HTMLapstrade.html_to_txt(html)
+    teksts = html_apstrade.html_to_txt(html)
 
-    emocijas = EmocijuAnalize.analizet_emocijas(teksts)
+    emocijas = emociju_analize.analizet_emocijas(teksts)
 
     save_article(
         url,
